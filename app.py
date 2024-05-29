@@ -16,9 +16,37 @@ def index():
 @app.route('/start', methods=['POST'])
 def start():
     gender = request.form['gender']
-    seeking = request.form['seeking']
+    earnestness = request.form['earnestness']
     session['gender'] = gender
-    session['seeking'] = seeking
+    session['earnestness'] = earnestness
+    return redirect(url_for('earnestness'))
+
+@app.route('/earnestness')
+def earnestness():
+    return render_template('earnestness.html')
+
+@app.route('/earnest', methods=['POST'])
+def earnest():
+    real_earnestness = request.form['earnestness']
+    session['real_earnestness'] = real_earnestness
+    return redirect(url_for('questionnaire'))
+
+@app.route('/questionnaire')
+def questionnaire():
+    return render_template('questionnaire.html')
+
+@app.route('/questionnaire', methods=['POST'])
+def questions():
+    question1 = request.form['question1']
+    question2 = request.form['question2']
+    question3 = request.form['question3']
+    question4 = request.form['question4']
+    question5 = request.form['question5']
+    session['question1'] = question1
+    session['question2'] = question2
+    session['question3'] = question3
+    session['question4'] = question4
+    session['question5'] = question5
     return redirect(url_for('waiting'))
 
 @app.route('/waiting')
@@ -30,8 +58,13 @@ def handle_join(data):
     user = {
         'id': request.sid,
         'gender': session['gender'],
-        'seeking': session['seeking'],
-        'text': data['text']
+        'earnestness': session['earnestness'],
+        'real_earnestness': session['real_earnestness'],
+        'question1': session['question1'],
+        'question2': session['question2'],
+        'question3': session['question3'],
+        'question4': session['question4'],
+        'question5': session['question5'],
     }
     waiting_room.append(user)
     session['user'] = user
@@ -40,7 +73,7 @@ def handle_join(data):
         match_users()
 
 def match_users():
-    if len(waiting_room) >= 2:
+    if len(waiting_room) > 1:
         user1 = waiting_room.pop(0)
         user2 = waiting_room.pop(0)
         room = str(random.randint(1000, 9999))
