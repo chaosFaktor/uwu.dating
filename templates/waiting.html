@@ -59,7 +59,7 @@
         socket.on('match', function(data) {
             document.getElementById('match-info').style.display = 'block';
             document.getElementById('waiting').style.display = 'None';
-            document.getElementById('partner-text').innerText = JSON.stringify(data.partner_text);
+            document.getElementById('partner-text').innerText = JSON.stringify(data.partner_data);
             window.data = data;
             startCountdown(data.timeout, data.room);
         });

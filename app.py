@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room, emit
-import random, time, threading
+import random, time, json
 
 app = Flask(__name__)
 app.secret_key = 'secret!'
@@ -70,6 +70,7 @@ def recognition_form():
     else:
         session['cat_ear_color'] = None
     session['distinguish'] = request.form['distinguish']
+    session['dect'] = request.form.get('dect')
     return redirect(url_for('waiting'))
 
 @app.route('/waiting')
@@ -90,6 +91,7 @@ def handle_join(data):
         'question5': session['question5'],
         'cat_ears': session['cat_ears'],
         'cat_ear_color': session['cat_ear_color'],
+        'dect': session['dect'],
         'distinguish': session['distinguish']
     }
     print(user)
@@ -107,8 +109,10 @@ def match_users():
         matches[room] = (user1, user2)
         join_room(room, sid=user1['id'])
         join_room(room, sid=user2['id'])
-        emit('match', {'room': room, 'partner_text': user2['gender'], 'timeout': TIMEOUT}, room=user1['id'])
-        emit('match', {'room': room, 'partner_text': user1['gender'], 'timeout': TIMEOUT}, room=user2['id'])
+        user1_match_data = {i: user1[i] for i in user1 if i != 'id'}
+        user2_match_data = {i: user2[i] for i in user2 if i != 'id'}
+        emit('match', {'room': room, 'partner_data': json.dumps(user2_match_data), 'timeout': TIMEOUT}, room=user1['id'])
+        emit('match', {'room': room, 'partner_data': json.dumps(user1_match_data), 'timeout': TIMEOUT}, room=user2['id'])
 
 @socketio.on('response')
 def handle_response(data):
