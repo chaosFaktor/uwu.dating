@@ -1,0 +1,57 @@
+@font-face {
+    font-family: 'Oxanium';
+    src: url('/static/fonts/Oxanium-Regular.ttf') format('truetype');
+}
+  
+@font-face {
+    font-family: 'DSEG14Classic';
+    src: url('/static/fonts/DSEG14Classic-Regular.ttf') format('truetype');
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    font-family: 'Oxanium', sans-serif;
+    background: #332726 url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}
+
+form {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1;
+}
+
+label, textarea, input, select, button {
+    display: block;
+    margin: 10px auto;
+}
+
+h1 {
+    font-family: 'DSEG14Classic', sans-serif;
+    font-size: 48px;
+    color: #ffff48;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 0 10px #ffff48, 0 0 20px #ffff48, 0 0 30px #ffff48;
+    margin-bottom: 20px;
+}
+
+h1::before {
+    content: "~~~~~~~";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #630f0f;
+    z-index: -1;
+    text-shadow: none
+}

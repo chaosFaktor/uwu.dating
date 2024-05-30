@@ -2,26 +2,69 @@
 <html>
 <head>
     <title>Waiting Room</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body>
-    <h1>Waiting Room</h1>
-    <p>Waiting for a match...</p>
+    <div class="header-container">
+        <h1>UwU.date</h1>
+    </div>
+    <div class="main-content">
+        <h2>Waiting Room</h2>
+        <p>Waiting for a match...</p>
+        <div id="match-info" style="display:none;">
+            <p>Match found! Here are the details:</p>
+            <p id="partner-text"></p>
+            <div id="countdown"></div>
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+            <button onclick="respond('accept')">Accept</button>
+            <button onclick="respond('reject')">Reject</button>
+        </div>
+    </div>
     <script>
         var socket = io();
-        var text = "{{ session['text'] }}";
+        var data;
+        var text = "{{ session['user']}}";//|tojson|safe }}";
         socket.emit('join', {text: text});
 
+        let countdownInterval;
+
+        function startCountdown(duration) {
+            let timeRemaining = duration;
+            let progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = '100%';
+            countdownInterval = setInterval(() => {
+                timeRemaining--;
+                progressBar.style.width = (timeRemaining / duration) * 100 + '%';
+                document.getElementById('countdown').innerText = `Time remaining: ${timeRemaining}s`;
+                if (timeRemaining <= 0) {
+                    clearInterval(countdownInterval);
+                    respond('timeout');
+                }
+            }, 1000);
+        }
+
         socket.on('match', function(data) {
-            var accept = confirm("Match found! " + data.partner_text + " Accept?");
-            if (accept) {
-                socket.emit('response', {room: data.room, response: 'accept'});
-            } else {
-                socket.emit('response', {room: data.room, response: 'reject'});
-            }
+            document.getElementById('match-info').style.display = 'block';
+            document.getElementById('partner-text').innerText = JSON.stringify(data.partner_text);
+            window.data = data;
+            startCountdown(data.timeout, data.room);
+        });
+
+        socket.on('return', function() {
+            alert("Match timeout! Returning to waiting room.")
+            location.reload();
+        });
+
+        socket.on('timeout', function() {
+            alert("Match timeout! Returning to waiting room.")
+            location.reload();
         });
 
         socket.on('meetup', function(data) {
+            clearInterval(countdownInterval);
             alert("Match accepted! Meet at " + data.location);
         });
 
@@ -29,6 +72,10 @@
             alert("Match rejected. Returning to waiting room.");
             location.reload();
         });
+
+        function respond(response) {
+            socket.emit('response', { room: window.data.room, response: response });
+        }
     </script>
 </body>
 </html>

@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room, emit
-import random, time
+import random, time, threading
 
 app = Flask(__name__)
 app.secret_key = 'secret!'
 socketio = SocketIO(app)
+
+TIMEOUT = 30
 
 waiting_room = []  # List to hold waiting users
 matches = {}  # Dictionary to hold matched users
@@ -101,12 +103,12 @@ def match_users():
     if len(waiting_room) > 1:
         user1 = waiting_room.pop(0)
         user2 = waiting_room.pop(0)
-        room = str(random.randint(1000, 9999))
+        room = str(random.randint(1000, 9999999)) # avoid collision the easy way
         matches[room] = (user1, user2)
         join_room(room, sid=user1['id'])
         join_room(room, sid=user2['id'])
-        emit('match', {'room': room}, room=user1['id'])
-        emit('match', {'room': room}, room=user2['id'])
+        emit('match', {'room': room, 'partner_text': user2['gender'], 'timeout': TIMEOUT}, room=user1['id'])
+        emit('match', {'room': room, 'partner_text': user1['gender'], 'timeout': TIMEOUT}, room=user2['id'])
 
 @socketio.on('response')
 def handle_response(data):
@@ -115,20 +117,32 @@ def handle_response(data):
     user = session['user']
 
     if room in matches:
+        if response == 'timeout':
+            if 'response' in user:
+                waiting_room.append(user)
+                emit('return', room=room)
+            else:
+                emit('timeout', room=room)
+            leave_room(room, sid=user['id'])
+            del matches[room]
+            return()
+
         user1, user2 = matches[room]
         partner = user1 if user['id'] == user2['id'] else user2
+
+        if response == 'reject':
+            emit('rejected', room=room)
+            leave_room(room, sid=user1['id'])
+            leave_room(room, sid=user2['id'])
+            del matches[room]
+            waiting_room.append(partner)
+            waiting_room.append(user)
+            return()
+
         if 'response' in partner:
             if partner['response'] == 'accept' and response == 'accept':
                 location = event_locations[random.randint(0, len(event_locations))]
                 emit('meetup', {'location': location}, room=room)
-            else:
-                emit('rejected', room=room)
-                leave_room(room, sid=user1['id'])
-                leave_room(room, sid=user2['id'])
-                del matches[room]
-                waiting_room.append(user1)
-                waiting_room.append(user2)
-                match_users()
         else:
             user['response'] = response
 
