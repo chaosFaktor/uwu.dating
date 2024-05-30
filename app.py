@@ -141,10 +141,20 @@ def handle_response(data):
 
         if 'response' in partner:
             if partner['response'] == 'accept' and response == 'accept':
-                location = event_locations[random.randint(0, len(event_locations))]
+                location = get_location()
                 emit('meetup', {'location': location}, room=room)
         else:
             user['response'] = response
+
+@socketio.on('message')
+def handle_message(data):
+    room = data['room']
+    message = data['message']
+    emit('message', {'message': message, 'sender': session['user']['id']}, room=room)
+
+def get_location():
+    index = random.randint(0, len(event_locations) - 1)
+    return event_locations[index]
 
 if __name__ == '__main__':
     socketio.run(app)

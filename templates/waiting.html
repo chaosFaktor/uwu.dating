@@ -3,7 +3,7 @@
 <head>
     <title>Waiting Room</title>
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="/static/scripts/socket.io.min.js"></script>
 </head>
 <body>
     <div class="header-container">
@@ -11,7 +11,9 @@
     </div>
     <div class="main-content">
         <h2>Waiting Room</h2>
-        <p>Waiting for a match...</p>
+        <div id="waiting">
+            <p>Waiting for a match...</p>
+        </div>
         <div id="match-info" style="display:none;">
             <p>Match found! Here are the details:</p>
             <p id="partner-text"></p>
@@ -19,8 +21,16 @@
             <div id="progress-bar-container">
                 <div id="progress-bar"></div>
             </div>
-            <button onclick="respond('accept')">Accept</button>
-            <button onclick="respond('reject')">Reject</button>
+            <div id="buttons">
+                <button onclick="respond('accept');document.getElementById('buttons').style.display = 'none';">Accept</button>
+                <button onclick="respond('reject');document.getElementById('buttons').style.display = 'none';">Reject</button>
+            </div>
+        </div>
+        <div id="chat-container" style="display:none;">
+            <h2>Chat</h2>
+            <div id="chat-box" style="height: 200px; width: 500px; overflow-y: scroll; background-color: #fff; color: #000;"></div>
+            <input type="text" id="chat-input" placeholder="Type your message here...">
+            <button onclick="sendMessage()">Send</button>
         </div>
     </div>
     <script>
@@ -48,23 +58,26 @@
 
         socket.on('match', function(data) {
             document.getElementById('match-info').style.display = 'block';
+            document.getElementById('waiting').style.display = 'None';
             document.getElementById('partner-text').innerText = JSON.stringify(data.partner_text);
             window.data = data;
             startCountdown(data.timeout, data.room);
         });
 
         socket.on('return', function() {
-            alert("Match timeout! Returning to waiting room.")
+            alert("Match timeout! Returning to waiting room.");
             location.reload();
         });
 
         socket.on('timeout', function() {
-            alert("Match timeout! Returning to waiting room.")
+            alert("Match timeout! Returning to waiting room.");
             location.reload();
         });
 
         socket.on('meetup', function(data) {
             clearInterval(countdownInterval);
+            document.getElementById('chat-container').style.display = 'block';
+            document.getElementById('countdown').style.display = 'None';
             alert("Match accepted! Meet at " + data.location);
         });
 
@@ -75,6 +88,23 @@
 
         function respond(response) {
             socket.emit('response', { room: window.data.room, response: response });
+        }
+
+        socket.on('message', function(data) {
+            var chatBox = document.getElementById('chat-box');
+            var messageElement = document.createElement('div');
+            messageElement.textContent = (data.sender === socket.id ? 'You: ' : 'Partner: ') + data.message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        function sendMessage() {
+            var chatInput = document.getElementById('chat-input');
+            var message = chatInput.value;
+            if (message) {
+                socket.emit('message', { room: window.data.room, message: message });
+                chatInput.value = '';
+            }
         }
     </script>
 </body>
