@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room, emit
-import random
+import random, time
 
 app = Flask(__name__)
 app.secret_key = 'secret!'
@@ -8,6 +8,8 @@ socketio = SocketIO(app)
 
 waiting_room = []  # List to hold waiting users
 matches = {}  # Dictionary to hold matched users
+last_check = time.time() # Implement periodic checks at some point
+event_locations = ['Troll Desk']
 
 @app.route('/')
 def index():
@@ -27,8 +29,11 @@ def earnestness():
 
 @app.route('/earnest', methods=['POST'])
 def earnest():
-    real_earnestness = request.form['earnestness']
-    session['real_earnestness'] = real_earnestness
+    if (request.form.get('earnestness')):
+        real_earnestness = request.form['earnestness']
+        session['real_earnestness'] = real_earnestness
+    else:
+        session['real_earnestness'] = None
     return redirect(url_for('questionnaire'))
 
 @app.route('/questionnaire')
@@ -47,6 +52,22 @@ def questions():
     session['question3'] = question3
     session['question4'] = question4
     session['question5'] = question5
+    return redirect(url_for('recognition'))
+
+@app.route('/recognition')
+def recognition():
+    return render_template('recognition.html')
+
+@app.route('/recognition', methods=['POST'])
+def recognition_form():
+    cat_ears = request.form['cat_ears']
+    session['cat_ears'] = cat_ears
+    if cat_ears != '404':
+        cat_ear_color = request.form['color']
+        session['cat_ear_color'] = cat_ear_color
+    else:
+        session['cat_ear_color'] = None
+    session['distinguish'] = request.form['distinguish']
     return redirect(url_for('waiting'))
 
 @app.route('/waiting')
@@ -65,7 +86,11 @@ def handle_join(data):
         'question3': session['question3'],
         'question4': session['question4'],
         'question5': session['question5'],
+        'cat_ears': session['cat_ears'],
+        'cat_ear_color': session['cat_ear_color'],
+        'distinguish': session['distinguish']
     }
+    print(user)
     waiting_room.append(user)
     session['user'] = user
 
@@ -80,8 +105,8 @@ def match_users():
         matches[room] = (user1, user2)
         join_room(room, sid=user1['id'])
         join_room(room, sid=user2['id'])
-        emit('match', {'room': room, 'partner_text': user2['text']}, room=user1['id'])
-        emit('match', {'room': room, 'partner_text': user1['text']}, room=user2['id'])
+        emit('match', {'room': room}, room=user1['id'])
+        emit('match', {'room': room}, room=user2['id'])
 
 @socketio.on('response')
 def handle_response(data):
@@ -94,7 +119,8 @@ def handle_response(data):
         partner = user1 if user['id'] == user2['id'] else user2
         if 'response' in partner:
             if partner['response'] == 'accept' and response == 'accept':
-                emit('meetup', {'location': 'Coffee Shop'}, room=room)
+                location = event_locations[random.randint(0, len(event_locations))]
+                emit('meetup', {'location': location}, room=room)
             else:
                 emit('rejected', room=room)
                 leave_room(room, sid=user1['id'])
