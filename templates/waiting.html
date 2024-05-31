@@ -9,8 +9,9 @@
     <div class="header-container">
         <h1>UwU.tours</h1>
     </div>
+    <h1 class="dect">DECT 3276</h1>
     <div class="main-content">
-        <h2>Waiting Room</h2>
+        <h2 id="h2">Waiting Room</h2>
         <div id="waiting">
             <p>Waiting for a match...</p>
         </div>
@@ -102,8 +103,8 @@
             }
 
             document.getElementById('matchup-text').style.display = 'block';
-            
-            alert("Match accepted! Meet at " + data.location + ".");
+
+            document.getElementById('h2').innerText="Let's meet!"
         });
 
         socket.on('rejected', function() {

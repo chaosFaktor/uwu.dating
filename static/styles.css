@@ -17,7 +17,7 @@ body {
     justify-content: flex-start;
     align-items: center;
     font-family: 'Oxanium', sans-serif;
-    background: #332726 url('background.jpg') no-repeat center center fixed;
+    background: #332726 no-repeat center center fixed;
     background-size: cover;
     color: white;
 }
@@ -51,6 +51,28 @@ h1::before {
     top: 0;
     left: 0;
     right: 0;
+    color: #630f0f;
+    z-index: -1;
+    text-shadow: none
+}
+
+.dect {
+    font-family: 'DSEG14Classic', sans-serif;
+    font-size: 48px;
+    color: #ffff48;
+    position: absolute;
+    top: 0;
+    right: 0;
+    text-align: center;
+    text-shadow: 0 0 10px #ffff48, 0 0 20px #ffff48, 0 0 30px #ffff48;
+    margin-bottom: 20px;
+}
+
+.dect::before {
+    content: "~~~~~~~~";
+    position: absolute;
+    top: 0;
+    left: 0;
     color: #630f0f;
     z-index: -1;
     text-shadow: none

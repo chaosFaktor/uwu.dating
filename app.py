@@ -11,7 +11,30 @@ TIMEOUT = 30
 waiting_room = []  # List to hold waiting users
 matches = {}  # Dictionary to hold matched users
 last_check = time.time() # Implement periodic checks at some point
-event_locations = ['the lamp in the UV-tunnel','under the pride flag at the Chaos Post','opposite to the entrance to the lounge', 'the entrance to the ZKM-Kubus', 'the NOC-helpdesk and ask for Jesus', 'the boykisser-pride-flag above the bottle sorting station','the Lavawiese behind the kitchen tent','the entrance to the "(A)I Tell You, You Tell Me"-exhibition','behind the pride-flag above the Chaos Post','the coin operated telephone at the POC','at the sticker-desk','the plants on the first floor above the troll desk']
+event_locations = ['the UwU-banner at the back side of the uv-tunnel',
+'the game playing on the beamer in front of the uv-tunnel',
+'the paws on the back side of the uv-tunnel',
+'the rainbow laces vending machine near the Chaos Post',
+'the electronics vending machine with niki fox sticks on top on the first floor',
+'the multiplayer snake screen',
+'the rope climbing location',
+'the µPOC helpdesk at the eurobox-pile',
+'the lamp in the UV-tunnel',
+'the Chaos Post sign below the pride flag',
+'the entrance of the lounge',
+'the entrance to the ZKM-Kubus',
+'the NOC-helpdesk and ask for Jesus',
+'the boykisser-pride-flag on the bridge on the first floor above the bottle sorting station',
+'the Lavawiese behind the kitchen tent',
+'the entrance to the "(A)I Tell You, You Tell Me"-exhibition',
+'the backside of the pride-flag on the second floor above the Chaos Post',
+'the coin operated telephone at the µPOC',
+'the sticker-desk near the entrance',
+'the plants on the first floor above the troll desk']
+
+waiting_room_joins = 0
+match_offers = 0
+meetups = 0
 
 @app.route('/')
 def index():
@@ -98,6 +121,9 @@ def handle_join(data):
     waiting_room.append(user)
     session['user'] = user
 
+    waiting_room_joins += 1
+    print('Match offers: ' + waiting_room_joins + '.')
+
     if len(waiting_room) > 1:
         match_users()
 
@@ -113,6 +139,8 @@ def match_users():
         user2_match_data = {i: user2[i] for i in user2 if i != 'id'}
         emit('match', {'room': room, 'partner_data': json.dumps(user2_match_data), 'timeout': TIMEOUT}, room=user1['id'])
         emit('match', {'room': room, 'partner_data': json.dumps(user1_match_data), 'timeout': TIMEOUT}, room=user2['id'])
+        match_offers += 1
+        print('Match offers: ' + match_offers + '.')
 
 @socketio.on('response')
 def handle_response(data):
@@ -147,6 +175,8 @@ def handle_response(data):
             if partner['response'] == 'accept' and response == 'accept':
                 location = get_location()
                 emit('meetup', {'location': location}, room=room)
+                meetups += 1
+                print('Match offers: ' + meetups + '.')
         else:
             user['response'] = response
 
