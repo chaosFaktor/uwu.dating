@@ -11,7 +11,7 @@ TIMEOUT = 30
 waiting_room = []  # List to hold waiting users
 matches = {}  # Dictionary to hold matched users
 last_check = time.time() # Implement periodic checks at some point
-event_locations = ['Troll Desk']
+event_locations = ['the lamp in the UV-tunnel','under the pride flag at the Chaos Post','opposite to the entrance to the lounge', 'the entrance to the ZKM-Kubus', 'the NOC-helpdesk and ask for Jesus', 'the boykisser-pride-flag above the bottle sorting station','the Lavawiese behind the kitchen tent','the entrance to the "(A)I Tell You, You Tell Me"-exhibition','behind the pride-flag above the Chaos Post','the coin operated telephone at the POC','at the sticker-desk','the plants on the first floor above the troll desk']
 
 @app.route('/')
 def index():
@@ -36,7 +36,7 @@ def earnest():
         session['real_earnestness'] = real_earnestness
     else:
         session['real_earnestness'] = None
-    return redirect(url_for('questionnaire'))
+    return redirect(url_for('recognition'))
 
 @app.route('/questionnaire')
 def questionnaire():
@@ -69,7 +69,7 @@ def recognition_form():
         session['cat_ear_color'] = cat_ear_color
     else:
         session['cat_ear_color'] = None
-    session['distinguish'] = request.form['distinguish']
+    session['distinguish'] = request.form.get('distinguish')
     session['dect'] = request.form.get('dect')
     return redirect(url_for('waiting'))
 
@@ -84,17 +84,17 @@ def handle_join(data):
         'gender': session['gender'],
         'earnestness': session['earnestness'],
         'real_earnestness': session['real_earnestness'],
-        'question1': session['question1'],
-        'question2': session['question2'],
-        'question3': session['question3'],
-        'question4': session['question4'],
-        'question5': session['question5'],
+        # 'question1': session['question1'],
+        # 'question2': session['question2'],
+        # 'question3': session['question3'],
+        # 'question4': session['question4'],
+        # 'question5': session['question5'],
         'cat_ears': session['cat_ears'],
         'cat_ear_color': session['cat_ear_color'],
         'dect': session['dect'],
         'distinguish': session['distinguish']
     }
-    print(user)
+    
     waiting_room.append(user)
     session['user'] = user
 

@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="header-container">
-        <h1>UwU.date</h1>
+        <h1>UwU.tours</h1>
     </div>
     <div class="main-content">
         <h2>Waiting Room</h2>
@@ -17,6 +17,18 @@
         <div id="match-info" style="display:none;">
             <p>Match found! Here are the details:</p>
             <p id="partner-text"></p>
+            <div id="matchup-text" style="display:none">
+                <label>Meetup Location:</label>
+                <textarea id="meetup" name="meetup" style="height: 12px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+                <label>Enemy DECT:</label>
+                <textarea id="dect" name="dect" style="height: 12px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+                <label>Distinguishing Features:</label>
+                <textarea id="distinguish" name="distinguish" style="height: 60px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+                <label>Cat Ears:</label>
+                <textarea id="cat_ears" name="cat_ears" style="height: 12px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+                <label>Color:</label>
+                <textarea id="cat_color" name="cat_color" style="height: 12px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+            </div>
             <div id="countdown"></div>
             <div id="progress-bar-container">
                 <div id="progress-bar"></div>
@@ -59,7 +71,7 @@
         socket.on('match', function(data) {
             document.getElementById('match-info').style.display = 'block';
             document.getElementById('waiting').style.display = 'None';
-            document.getElementById('partner-text').innerText = JSON.stringify(data.partner_data);
+            //document.getElementById('partner-text').innerText = JSON.stringify(data.partner_data);
             window.data = data;
             startCountdown(data.timeout, data.room);
         });
@@ -78,7 +90,20 @@
             clearInterval(countdownInterval);
             document.getElementById('chat-container').style.display = 'block';
             document.getElementById('countdown').style.display = 'None';
-            alert("Match accepted! Meet at " + data.location);
+
+            let partner_data = JSON.parse(window.data.partner_data);
+            document.getElementById('meetup').value = "At " + data.location;
+            document.getElementById('dect').value = partner_data['dect'];
+            document.getElementById('distinguish').value = partner_data['distinguish'];
+            document.getElementById('cat_ears').value = partner_data['cat_ears'];
+
+            if (partner_data['cat_ears' != '404']) {
+                document.getElementById('cat_color').value = partner_data['cat_color'];
+            }
+
+            document.getElementById('matchup-text').style.display = 'block';
+            
+            alert("Match accepted! Meet at " + data.location + ".");
         });
 
         socket.on('rejected', function() {
@@ -106,6 +131,13 @@
                 chatInput.value = '';
             }
         }
+
+        document.getElementById('chat-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
     </script>
 </body>
 </html>

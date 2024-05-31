@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>UwU.date</title>
+    <title>UwU.tours</title>
     <link rel="stylesheet" type="text/css" href="/static/styles.css">
 </head>
 <body>
-    <h1>UwU.date</h1>
+    <h1>UwU.tours</h1>
     <form action="/recognition" method="post">
         <label>Erkennungsmerkmale:</label>
-        <label for="cat_ears">Katzenohren?</label>
+        <label for="cat_ears">Are you wearing cat ears?</label>
         <select name="cat_ears" id="cat_ears" required>
             <option value="blinkenlights">Illuminated</option>
             <option value="plain">Plain</option>
@@ -18,7 +18,7 @@
         <textarea id="color" name="color"></textarea><br>
         <label for="dect">Do you have an eventphone number (DECT)?</label><br>
         <textarea id="dect" name="dect"></textarea><br>
-        <label for="distinguish">Any other distinguishing marks?</label><br>
+        <label for="distinguish">Any other distinguishing features?</label><br>
         <textarea id="distinguish" name="distinguish"></textarea><br>
         <button type="submit">Submit</button>
     </form>
