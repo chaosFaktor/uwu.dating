@@ -13,7 +13,7 @@
     <div class="main-content">
         <h2 id="h2">Waiting Room</h2>
         <div id="waiting">
-            <p>Waiting for a match...</p>
+            <p>Waiting for a match... (sometimes a refresh helps)</p>
         </div>
         <div id="match-info" style="display:none;">
             <p>Match found! Here are the details:</p>
@@ -78,11 +78,13 @@
         });
 
         socket.on('return', function() {
+            window.onbeforeunload = undefined;
             alert("Match timeout! Returning to waiting room.");
             location.reload();
         });
 
         socket.on('timeout', function() {
+            window.onbeforeunload = undefined;
             alert("Match timeout! Returning to waiting room.");
             location.reload();
         });
@@ -108,6 +110,7 @@
         });
 
         socket.on('rejected', function() {
+            window.onbeforeunload = undefined;
             alert("Match rejected. Returning to waiting room.");
             location.reload();
         });
@@ -138,6 +141,17 @@
                 event.preventDefault();
                 sendMessage();
             }
+        });
+
+
+        window.onbeforeunload = function () {
+            socket.emit('client_disconnecting');
+        }
+
+        socket.on('partner_disconnected', function() {
+            window.onbeforeunload = undefined;
+            alert("Partner disconnected. Returning to waiting room.");
+            location.reload();
         });
     </script>
 </body>

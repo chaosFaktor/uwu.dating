@@ -6,11 +6,17 @@ app = Flask(__name__)
 app.secret_key = 'secret!'
 socketio = SocketIO(app)
 
-TIMEOUT = 30
+TIMEOUT = 120
 
 waiting_room = []  # List to hold waiting users
 matches = {}  # Dictionary to hold matched users
 last_check = time.time() # Implement periodic checks at some point
+
+## Statistics
+waiting_room_joins = 0
+match_offers = 0
+meetups = 0
+
 event_locations = ['the UwU-banner at the back side of the uv-tunnel',
 'the game playing on the beamer in front of the uv-tunnel',
 'the paws on the back side of the uv-tunnel',
@@ -31,10 +37,6 @@ event_locations = ['the UwU-banner at the back side of the uv-tunnel',
 'the coin operated telephone at the µPOC',
 'the sticker-desk near the entrance',
 'the plants on the first floor above the troll desk']
-
-waiting_room_joins = 0
-match_offers = 0
-meetups = 0
 
 @app.route('/')
 def index():
@@ -121,8 +123,8 @@ def handle_join(data):
     waiting_room.append(user)
     session['user'] = user
 
-    waiting_room_joins += 1
-    print('Match offers: ' + waiting_room_joins + '.')
+    #waiting_room_joins += 1
+    print('Waiting Room joined.')
 
     if len(waiting_room) > 1:
         match_users()
@@ -139,8 +141,8 @@ def match_users():
         user2_match_data = {i: user2[i] for i in user2 if i != 'id'}
         emit('match', {'room': room, 'partner_data': json.dumps(user2_match_data), 'timeout': TIMEOUT}, room=user1['id'])
         emit('match', {'room': room, 'partner_data': json.dumps(user1_match_data), 'timeout': TIMEOUT}, room=user2['id'])
-        match_offers += 1
-        print('Match offers: ' + match_offers + '.')
+        #match_offers += 1
+        print('Match offered!')
 
 @socketio.on('response')
 def handle_response(data):
@@ -155,7 +157,7 @@ def handle_response(data):
                 emit('return', room=room)
             else:
                 emit('timeout', room=room)
-            leave_room(room, sid=user['id'])
+            socketio.close_room(room)
             del matches[room]
             return()
 
@@ -164,8 +166,7 @@ def handle_response(data):
 
         if response == 'reject':
             emit('rejected', room=room)
-            leave_room(room, sid=user1['id'])
-            leave_room(room, sid=user2['id'])
+            socketio.close_room(room)
             del matches[room]
             waiting_room.append(partner)
             waiting_room.append(user)
@@ -175,8 +176,8 @@ def handle_response(data):
             if partner['response'] == 'accept' and response == 'accept':
                 location = get_location()
                 emit('meetup', {'location': location}, room=room)
-                meetups += 1
-                print('Match offers: ' + meetups + '.')
+                #meetups += 1
+                print('Meetup offered! Location: ' + location + '.')
         else:
             user['response'] = response
 
@@ -189,6 +190,38 @@ def handle_message(data):
 def get_location():
     index = random.randint(0, len(event_locations) - 1)
     return event_locations[index]
+
+@socketio.on('client_disconnecting')
+def disconnect_details():
+    user = session.get('user')
+    if user:
+        if user in waiting_room:
+            waiting_room.remove(user)
+        for room, (user1, user2) in list(matches.items()):
+            if user['id'] == user1['id'] or user['id'] == user2['id']:
+                partner = user2 if user['id'] == user1['id'] else user1
+                emit('partner_disconnected', room=room)
+                waiting_room.append(partner)
+                leave_room(room, sid=user1['id'])
+                leave_room(room, sid=user2['id'])
+                socketio.close_room(room)
+                del matches[room]
+
+@socketio.on('disconnect')
+def disconnect():
+    user = session.get('user')
+    if user:
+        if user in waiting_room:
+            waiting_room.remove(user)
+        for room, (user1, user2) in list(matches.items()):
+            if user['id'] == user1['id'] or user['id'] == user2['id']:
+                partner = user2 if user['id'] == user1['id'] else user1
+                emit('partner_disconnected', room=room)
+                waiting_room.append(partner)
+                leave_room(room, sid=user1['id'])
+                leave_room(room, sid=user2['id'])
+                socketio.close_room(room)
+                del matches[room]
 
 if __name__ == '__main__':
     socketio.run(app)
