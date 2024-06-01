@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Waiting Room</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <script src="/static/scripts/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="header-container">
+        <h1>UwU.tours</h1>
+    </div>
+    <h1 class="dect">DECT 3276</h1>
+    <div class="main-content">
+        <h2 id="h2">Waiting Room</h2>
+        <div id="waiting">
+            <p>Waiting for a match... (sometimes a refresh helps)</p>
+        </div>
+        <div id="match-info" style="display:none;">
+            <p>Match found! Here are the details:</p>
+            <p id="partner-text"></p>
+            <div id="matchup-text" style="display:none">
+                <label>Meetup Location:</label>
+                <textarea id="meetup" name="meetup" style="height: 12px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+                <label>Enemy DECT:</label>
+                <textarea id="dect" name="dect" style="height: 12px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+                <label>Distinguishing Features:</label>
+                <textarea id="distinguish" name="distinguish" style="height: 60px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+                <label>Cat Ears:</label>
+                <textarea id="cat_ears" name="cat_ears" style="height: 12px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+                <label>Color:</label>
+                <textarea id="cat_color" name="cat_color" style="height: 12px; width: 500px; overflow-y: scroll; background-color:#2A2A2A !important; color: white;" disabled></textarea>
+            </div>
+            <div id="countdown"></div>
+            <div id="progress-bar-container">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="buttons">
+                <button onclick="respond('accept');document.getElementById('buttons').style.display = 'none';">Accept</button>
+                <button onclick="respond('reject');document.getElementById('buttons').style.display = 'none';">Reject</button>
+            </div>
+        </div>
+        <div id="chat-container" style="display:none;">
+            <h2>Chat</h2>
+            <div id="chat-box" style="height: 200px; width: 500px; overflow-y: scroll; background-color: #fff; color: #000;"></div>
+            <input type="text" id="chat-input" placeholder="Type your message here...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        var socket = io();
+        var data;
+        var text = "{{ session['user']}}";//|tojson|safe }}";
+        socket.emit('join', {text: text});
+
+        let countdownInterval;
+
+        function startCountdown(duration) {
+            let timeRemaining = duration;
+            let progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = '100%';
+            countdownInterval = setInterval(() => {
+                timeRemaining--;
+                progressBar.style.width = (timeRemaining / duration) * 100 + '%';
+                document.getElementById('countdown').innerText = `Time remaining: ${timeRemaining}s`;
+                if (timeRemaining <= 0) {
+                    clearInterval(countdownInterval);
+                    respond('timeout');
+                }
+            }, 1000);
+        }
+
+        socket.on('match', function(data) {
+            document.getElementById('match-info').style.display = 'block';
+            document.getElementById('waiting').style.display = 'None';
+            //document.getElementById('partner-text').innerText = JSON.stringify(data.partner_data);
+            window.data = data;
+            startCountdown(data.timeout, data.room);
+        });
+
+        socket.on('return', function() {
+            window.onbeforeunload = undefined;
+            alert("Match timeout! Returning to waiting room.");
+            location.reload();
+        });
+
+        socket.on('timeout', function() {
+            window.onbeforeunload = undefined;
+            alert("Match timeout! Returning to waiting room.");
+            location.reload();
+        });
+
+        socket.on('meetup', function(data) {
+            clearInterval(countdownInterval);
+            document.getElementById('chat-container').style.display = 'block';
+            document.getElementById('countdown').style.display = 'None';
+
+            let partner_data = JSON.parse(window.data.partner_data);
+            document.getElementById('meetup').value = "At " + data.location;
+            document.getElementById('dect').value = partner_data['dect'];
+            document.getElementById('distinguish').value = partner_data['distinguish'];
+            document.getElementById('cat_ears').value = partner_data['cat_ears'];
+
+            if (partner_data['cat_ears' != '404']) {
+                document.getElementById('cat_color').value = partner_data['cat_color'];
+            }
+
+            document.getElementById('matchup-text').style.display = 'block';
+
+            document.getElementById('h2').innerText="Let's meet!"
+        });
+
+        socket.on('rejected', function() {
+            window.onbeforeunload = undefined;
+            alert("Match rejected. Returning to waiting room.");
+            location.reload();
+        });
+
+        function respond(response) {
+            socket.emit('response', { room: window.data.room, response: response });
+        }
+
+        socket.on('message', function(data) {
+            var chatBox = document.getElementById('chat-box');
+            var messageElement = document.createElement('div');
+            messageElement.textContent = (data.sender === socket.id ? 'You: ' : 'Partner: ') + data.message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        function sendMessage() {
+            var chatInput = document.getElementById('chat-input');
+            var message = chatInput.value;
+            if (message) {
+                socket.emit('message', { room: window.data.room, message: message });
+                chatInput.value = '';
+            }
+        }
+
+        document.getElementById('chat-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+
+        window.onbeforeunload = function () {
+            socket.emit('client_disconnecting');
+        }
+
+        socket.on('partner_disconnected', function() {
+            window.onbeforeunload = undefined;
+            alert("Partner disconnected. Returning to waiting room.");
+            location.reload();
+        });
+    </script>
+</body>
+</html>

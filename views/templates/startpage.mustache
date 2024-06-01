@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UwU.tours</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+</head>
+<body>
+    <h1>UwU.tours</h1>
+    <h1 class="dect">DECT 3276</h1>
+    <form action="/start" method="post">
+        <label for="lang">Gender</label>
+        <select name="gender" id="lang">
+            <option value="UwU">UwU</option>
+            <option value="OwO">OwO</option>
+            <option value="uwu_angry">ÙwÚ</option>
+            <option value="owo_angry">ÒwÓ</option>
+            <option value="uwu_tired">Úwù</option>
+            <option value="owo_tired">ÓwÒ</option>
+            <option value="Divers">Divers</option>
+        </select><br>
+        <label>Are you earnest about this?</label><br>
+        <input type="radio" id="Yes" name="earnestness" value="yes" required>
+        <label for="yes">Yes</label><br>
+        <input type="radio" id="No" name="earnestness" value="no" required>
+        <label for="no">No</label><br>
+        <button type="submit">Start</button>
+    </form>
+</body>
+</html>

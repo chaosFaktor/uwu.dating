@@ -1,0 +1,4 @@
+{
+    "server": "settings/server.json",
+    "session": "settings/session.json"
+}
