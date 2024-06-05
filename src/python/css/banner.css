@@ -9,7 +9,7 @@
 @media (prefers-color-scheme: light) {
     :root {
         --heading-color:#5d00e8;
-        --heading-background-color: #a60000;
+        --heading-background-color: #b57c7c;
     }
     .title h1, .dect {
         text-shadow: 0 0 190px var(--heading-color), 0 0 90px var(--heading-color), 0 0 70px var(--heading-color)!important;

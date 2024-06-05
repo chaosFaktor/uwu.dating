@@ -93,10 +93,17 @@ $(document).ready(event=>{
                     .display();
             }
         } else if (msg.type= "chat/message") {
+            console.log(msg);
             new ViewChatMessageBuilder()
                 .set_type(ViewChatMessage.Type.NOT_OWN)
                 .set_text(msg.text)
                 .display();
+        } else if (msg.type= "chat/disconnect") {
+            new ViewChatMessage()
+                .set_type(ViewChatMessage.Type.NARRATION)
+                .set_text("The other participant closed the chat, but may reconnect.")
+                .display();
+        } else {
         }
     });
     con.await_open().then(event=>{

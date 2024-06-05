@@ -97,6 +97,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler, torndsession.sessionh
         if (self.session.get("id") == None):
             return
         session_id = self.session["id"]
+        sender = UserManager.get_user_by_session_id(session_id)
+        if (not sender.get_loggedin()):
+            return
         msg = json.loads(text)
         if (msg["type"] == "match/register"):
             UserManager.MatchMaking.register(self.user)
@@ -120,6 +123,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler, torndsession.sessionh
             sender = UserManager.get_user_by_session_id(session_id)
 
             receivant = sender.get_match()
+            if (msg.get("text") == None):
+                return
             if (receivant.get_status() == User.Status.IN_CHAT):
                 receivant.send_ws_msg(json.dumps({
                     "type": "chat/message",
