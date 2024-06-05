@@ -1,6 +1,6 @@
 # UwU Dating
 
-This is a total rewrite of UwU.tours app by [larsmm](https://github.com/larsmm) and [jarainf](https://github.com/jarainf).
+This is a total rewrite of the UwU.tours app by [larsmm](https://github.com/larsmm) and [jarainf](https://github.com/jarainf).
 [Original UwU.tours](https://github.com/jarainf/UwU.tours)
 
 
