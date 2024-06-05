@@ -1,0 +1,4 @@
+{
+    "session-id-length": 32,
+    "lifetime": 90000
+}

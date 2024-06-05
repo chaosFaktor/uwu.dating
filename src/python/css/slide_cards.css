@@ -1,0 +1,37 @@
+:root {
+    --width-maincontent: 90vw;
+    --top-margin-maincontent:30px;
+    --height-maincontent: calc(100vh - var(--top-margin-maincontent));
+    --current-shift: 0;
+}
+
+
+.maincontent {
+    margin-top:var(--top-margin-maincontent);
+    margin-bottom:var(--bottom-margin-maincontent);
+    margin-inline:auto;
+    width:var(--width-maincontent);
+    height:var(--height-maincontent);
+    overflow: hidden;
+}
+
+.section {
+    overflow:scroll;
+    width: var(--width-maincontent);
+    height: var(--height-maincontent);
+}
+#section-0 {
+    margin-left:calc(var(--width-maincontent) * calc(0 - var(--current-shift)));
+}
+#section-1 {
+    margin-left:calc(var(--width-maincontent) * calc(1 - var(--current-shift)));
+    margin-top:calc(-1 * var(--height-maincontent));
+}
+#section-2 {
+    margin-left: calc(var(--width-maincontent) * calc(2 - var(--current-shift)));
+    margin-top:calc(-1 * var(--height-maincontent));
+}
+#section-3 {
+    margin-left: calc(var(--width-maincontent) * calc(3 - var(--current-shift)));
+    margin-top:calc(-1 * var(--height-maincontent));
+}

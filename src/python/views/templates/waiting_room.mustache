@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{title}}</title>
+        <link rel="stylesheet" type="text/css" href="/css/waiting_room.css">
+        <link rel="stylesheet" type="text/css" href="/css/waiting_screen_animation.css">
+        <link rel="stylesheet" type="text/css" href="/css/links.css">
+        
+
+        <script src="/js/q6.js"></script>
+        <script src="/js/app.js"></script>
+        <script src="/js/ws.js"></script>
+        <script src="/js/waiting_room.js"></script>
+    </head>
+    <body>
+        {{>site_banner}}
+        
+        <section class="waiting_screen">
+            {{>waiting_room_waiting_screen}}
+        </section>
+        <div class="link_box">
+            <a class="back_link" href="/app/chat">Back to chat</a>
+            <a class="back_link" href="/login">Back to login</a>
+        </div>
+    </body>
+</html>

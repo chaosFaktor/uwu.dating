@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+    python-uwudating:
+        container_name: python-uwudating
+        build:
+            context: ./
+            dockerfile: dockerfiles/python.dockerfile
+        command: python3 ./main.py
+        volumes:
+         - ./src/python:/opt/uwu_dating
+        ports:
+         - 127.0.0.1:8080:8080
+        networks:
+         - backend
+networks:
+    backend:
+        driver: bridge
+

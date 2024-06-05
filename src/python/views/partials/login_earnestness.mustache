@@ -1,0 +1,8 @@
+<form onsubmit="return false;">
+    <h2>Are you really earnest about this?</h2>
+    {{#form_earnestness}}
+        <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}">
+        <label for="{{id}}">{{label}}</label>
+    {{/form_earnestness}}
+    <button type="submit">Submit</button>
+</form>

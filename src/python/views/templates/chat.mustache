@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>{{title}}</title>
+        
+        <link rel="stylesheet" type="text/css" href="/css/chat.css">
+        <link rel="stylesheet" type="text/css" href="/css/links.css">
+        
+        <script src="/js/q6.js"></script>
+        <script src="/js/app.js"></script>
+        <script src="/js/ws.js"></script>
+        <script src="/js/chat.js"></script>
+        
+    </head>
+
+    <body>
+        {{>site_banner}}
+        <div class="maincontent">
+            <div class="user_info_wrapper">
+                <ul class="user_info">
+                    {{#user_info}}
+                        <li>Designated Meetup-Location: <b>{{meetup_location}}</b></li>
+                        {{#cat_ears}}
+                            <li>Cat-Ears: <b>{{cat_ears}}</b></li>
+                        {{/cat_ears}}
+
+                        {{#dect}}
+                            <li>DECT: <b>{{dect}}</b></li>
+                        {{/dect}}
+
+                        {{#distinguish}}
+                            <li>Distinguishing features: <div class="distinguishing_features_box">{{distinguish}}</div></li>
+                        {{/distinguish}}
+                    {{/user_info}}
+                </ul>
+            </div>
+
+            <div class="chat_window_wrapper">
+                <div class="chat_window">
+                    <div class="text_box_container">
+                    </div>
+                    <div class="message_input_wrapper">
+                        <input type="text" placeholder="Message" id="message_input">
+                        <button id="send_btn">send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="back_link" href="/app/waiting_room">Back to waiting room</a>
+    </body>
+</html>

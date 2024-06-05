@@ -1,0 +1,9 @@
+{
+    "banner": {
+        "title": "UwU.tours",
+        "dect": "DECT 3276"
+    },
+    "template": "views/templates/waiting_room.mustache",
+    "title": "Waiting Room",
+    "heading": "UwU.tours"
+}

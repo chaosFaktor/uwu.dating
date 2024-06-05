@@ -1,0 +1,19 @@
+<form onsubmit="return false;" id="gender-form">
+    <h2>Gender</h2>
+    
+    {{#form_gender_select}}
+        <select name="{{name}}" id="{{id}}">
+            {{#options}}
+                <option value="{{value}}">{{html}}</option>
+            {{/options}}
+        </select>
+    {{/form_gender_select}}
+    
+    <h2>Are you earnest about this?</h2>
+    {{#form_gender}}
+        <input type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}} " {{#required}}required{{/required}}>
+        <label for="{{id}}">{{label}}</label>
+    {{/form_gender}}
+    
+    <button>Submit</button>
+</form>

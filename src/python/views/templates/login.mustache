@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <link rel="stylesheet" type="text/css" href="/css/slide_cards.css">
+
+
+    <script src="/js/q6.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/slide_cards.js"></script>
+</head>
+<body>
+    {{>site_banner}}
+    <div class="maincontent">
+        {{#forms}}
+            <section class="section" id="section-0">
+                {{>login_gender}}
+            </section>
+            <section class="section" id="section-1">
+                {{>login_earnestness}}
+            </section>
+            <section class="section" id="section-2">
+                {{>login_recognition}}
+            </section>
+            <section class="section" id="section-3">
+                <form id="submit-form" onsubmit="return false">
+                    <button onclick="">Continue to waiting Room</button>
+                </form>
+            </section>
+        {{/forms}}
+    </div>
+    
+    <script src="/js/login.js"></script>
+
+</body>
+</html>

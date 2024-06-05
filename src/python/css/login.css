@@ -1,0 +1,77 @@
+:root {
+    --form-width: 50vw;
+    --form-height: 74vh;
+    --heading-color: #ffff48;
+    --main-height: 100vh;
+    --body-bg: #332726;
+}
+
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --body-bg: #ffb4ae;
+        --main-text-color:black;
+
+    }    
+    .maincontent {
+        border-color:black;
+        border-width: 1px;
+
+    }
+}
+
+@font-face {
+    font-family: 'Oxanium';
+    src: url('/static/fonts/Oxanium-Regular.ttf') format('truetype');
+}
+  
+@font-face {
+    font-family: 'DSEG14Classic';
+    src: url('/static/fonts/DSEG14Classic-Regular.ttf') format('truetype');
+}
+
+.maincontent {
+    height:var(--main-height);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Oxanium', sans-serif;
+    background: var(--body-bg) no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}
+
+form {
+    position:relative;
+    width:30px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    padding-bottom: 40px;
+    border-radius: 10px;
+    text-align: center;
+    margin-inline:auto;
+    width:var(--form-width);
+    height:var(--form-height);
+    overflow-y:scroll;
+    transition:200ms;
+
+
+}
+
+label, textarea, input, select {
+    display: block;
+    margin: 10px auto;
+}
+input[type=text] {
+    border:0;
+    box-shadow:0;
+    font-size:18px;
+}
+
+
+
+.login_form_list {
+    list-style: none;
+}

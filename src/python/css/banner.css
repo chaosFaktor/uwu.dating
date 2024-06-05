@@ -1,0 +1,71 @@
+:root {
+    --heading-color: #ffff48;
+    
+    --dect-pos-right: 10vw;
+    --dect-pos-top: 2vh;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --heading-color:#5a0ecc;
+    }
+    .title h1, .dect {
+        text-shadow: 0 0 190px var(--heading-color), 0 0 90px var(--heading-color), 0 0 70px var(--heading-color)!important;
+    }
+
+}
+
+@media only screen and (max-width: 90vh) {
+    :root {
+        --dect-pos-top: calc(100% - 50px);
+        --dect-pos-right: center;
+    }
+    .title h1 {
+        margin-top:20px;
+        margin-inline:auto;
+    
+    }
+}
+.dect {
+    font-family: 'DSEG14Classic', sans-serif;
+    font-size: 48px;
+    color: var(--heading-color);
+    position: absolute;
+    top: var(--dect-pos-top);
+    right: var(--dect-pos-right);
+    text-align: center;
+    text-shadow: 0 0 10px var(--heading-color), 0 0 20px var(--heading-color), 0 0 30px var(--heading-color);
+    margin-bottom: 20px;
+    transition:200ms;
+}
+
+.dect::before {
+    content: "~~~~ ~~~~";
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #630f0f;
+    z-index: -1;
+    text-shadow: none
+}
+
+.title h1 {
+    font-family: 'DSEG14Classic', sans-serif;
+    font-size: 48px;
+    color: var(--heading-color);
+    position: relative;
+    text-align: center;
+    text-shadow: 0 0 10px var(--heading-color), 0 0 20px var(--heading-color), 0 0 30px var(--heading-color);
+    margin-bottom: 20px;
+}
+
+.title h1::before {
+    content: "~~~~~~~~";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #630f0f;
+    z-index: -1;
+    text-shadow: none
+}

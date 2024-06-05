@@ -1,0 +1,50 @@
+:root {
+    --bar-width: 32%;
+    --bar-height:10px;
+    --bar-left-color: red;
+    --bar-mid-color: blue;
+    --bar-right-color: green;
+    --animation-duration: 3s;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --bar-left-color:rgb(255, 59, 59);
+        --bar-mid-color: rgb(59, 59, 255);
+        --bar-right-color: rgb(95, 255, 95);
+    }
+}
+.waiting_screen_animation {
+    display:inline-block;
+    height:var(--bar-height);
+    width:var(--bar-width);
+    animation-iteration-count: infinite;
+    animation-name:waiting_animation;
+    animation-direction: alternate-reverse;
+    
+}
+.waiting_screen_animation_left {
+    animation-duration: var(--animation-duration);
+    background-color: var(--bar-left-color);
+    
+}
+.waiting_screen_animation_mid {
+    animation-duration: var(--animation-duration);
+    animation-delay: calc(var(--animation-duration) / 3);
+    background-color: var(--bar-mid-color);
+    
+}
+.waiting_screen_animation_right {
+    animation-duration: var(--animation-duration);
+    animation-delay: calc(calc(var(--animation-duration) / 3) * 2);
+    background-color: var(--bar-right-color);
+    
+}
+@keyframes waiting_animation {
+    0% {
+        width:0;
+    }
+    100% {
+        width:var(--bar-width);
+    }
+}

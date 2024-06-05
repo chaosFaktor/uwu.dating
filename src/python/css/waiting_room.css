@@ -1,0 +1,84 @@
+:root {
+    --form-width: 50vw;
+    --body-bg: #332726;
+    --main-text-color:white;
+
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --body-bg: #ffb4ae;
+        --maincontent-bg:rgb(240, 240, 240);
+        --main-text-color:black;
+
+    }    
+    .maincontent {
+        border-color:black;
+        border-width: 1px;
+
+    }
+}
+@media only screen and (max-width: 70vh) {
+    h2 {
+        padding:10px;
+        padding-top:0;
+    }
+}
+@font-face {
+    font-family: 'Oxanium';
+    src: url('/static/fonts/Oxanium-Regular.ttf') format('truetype');
+}
+  
+@font-face {
+    font-family: 'DSEG14Classic';
+    src: url('/static/fonts/DSEG14Classic-Regular.ttf') format('truetype');
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    font-family: 'Oxanium', sans-serif;
+    background: var(--body-bg) no-repeat center center fixed;
+    background-size: cover;
+    color: var(--main-text-color);
+}
+
+form {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin-inline:auto;
+    width:var(--form-width);
+
+}
+
+label, textarea, input, select, button {
+    display: block;
+    margin: 10px auto;
+}
+
+h1 {
+    font-family: 'DSEG14Classic', sans-serif;
+    font-size: 48px;
+    color: var(--heading-color);
+    position: relative;
+    text-align: center;
+    text-shadow: 0 0 10px var(--heading-color), 0 0 20px var(--heading-color), 0 0 30px var(--heading-color);
+    margin-bottom: 20px;
+}
+
+.login_form_list {
+    list-style: none;
+}
+
+
+
+.slide_out_left {
+    display: none;
+}

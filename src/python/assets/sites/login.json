@@ -1,0 +1,66 @@
+{
+    "template": "views/templates/login.mustache",
+    "banner": {
+        "title": "UwU.tours",
+        "dect": "DECT 3276"
+    },
+    "forms": {
+        "form_gender_select": {
+            "name": "gender",
+            "id": "lang",
+            "options": [
+                    {"value": "uwu", "html": "UwU"},
+                    {"value": "owo", "html": "OwO"},
+                    {"value": "uwu_angry", "html": "ÙwÚ"},
+                    {"value": "uwu_angry_2", "html": "ÒwÓ"},
+                    {"value": "uwu_tired", "html": "Úwù"},
+                    {"value": "owo_tired", "html": "ÓwÒ"},
+                    {"value": "yes", "html": "Yes"},
+                    {"value": "no", "html": "No"},
+                    {"value": "maybe", "html": "Maybe"},
+                    {"value": "diverse", "html": "Diverse"}
+            ]
+        },
+        "form_gender": [
+            {
+                "type": "radio",
+                "label": "Yes",
+                "id": "yes",
+                "name": "earnestness",
+                "value": "yes",
+                "required": true
+            }, {
+            
+                "type": "radio",
+                "label": "No",
+                "id": "no",
+                "name": "earnestness",
+                "value": "no",
+                "required": true
+            }
+        ],
+        "form_earnestness": [
+            {
+                "type": "checkbox",
+                "label": "Yes, really",
+                "id": "yes",
+                "name": "earnestness",
+                "value": "yes"
+            }, {
+                "type": "checkbox",
+                "label": "No",
+                "id":"no",
+                "name": "earnestness",
+                "value": "no"
+
+            }, {
+                "type": "checkbox",
+                "label": "Maybe",
+                "id":"maybe",
+                "name": "earnestness",
+                "value": "maybe"
+
+            }
+        ]
+    }
+}

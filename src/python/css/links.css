@@ -1,0 +1,22 @@
+:root {
+    --link-color: rgb(188, 188, 188);
+    --link-color-active: white;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --link-color:rgb(31, 31, 31);
+        --link-color-active:black;
+    }
+}
+.back_link {
+    color: var(--link-color);
+    font-size: 30px;
+    text-decoration-line: none;
+    transition-duration:150ms;
+    display:block;
+}
+back_link:hover {
+    color:var(--link-color-active);
+    transition-duration:150ms;
+}

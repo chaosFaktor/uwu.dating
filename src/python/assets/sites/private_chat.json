@@ -1,0 +1,7 @@
+{
+    "template": "views/templates/chat.mustache",
+    "banner": {
+        "title": "UwU.tours",
+        "dect": "DECT 3276"
+    }
+}
