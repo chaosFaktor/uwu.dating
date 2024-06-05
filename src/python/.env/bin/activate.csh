@@ -8,7 +8,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/home/kali/Programmier/Coding-Projekte/active/C3B3_WEB_TEST/software/web_server/.env"
+setenv VIRTUAL_ENV "/home/kali/Programmier/Coding-Projekte/active/uwudating/uwu.date2/src/python/.env"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"

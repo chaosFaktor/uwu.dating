@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/kali/Programmier/Coding-Projekte/active/C3B3_WEB_TEST/software/web_server/.env"
+set -gx VIRTUAL_ENV "/home/kali/Programmier/Coding-Projekte/active/uwudating/uwu.date2/src/python/.env"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

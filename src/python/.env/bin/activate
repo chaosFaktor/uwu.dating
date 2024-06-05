@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/kali/Programmier/Coding-Projekte/active/C3B3_WEB_TEST/software/web_server/.env"
+VIRTUAL_ENV="/home/kali/Programmier/Coding-Projekte/active/uwudating/uwu.date2/src/python/.env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

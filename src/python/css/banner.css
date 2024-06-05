@@ -1,5 +1,6 @@
 :root {
     --heading-color: #ffff48;
+    --heading-background-color: #630f0f;
     
     --dect-pos-right: 10vw;
     --dect-pos-top: 2vh;
@@ -7,7 +8,8 @@
 
 @media (prefers-color-scheme: light) {
     :root {
-        --heading-color:#5a0ecc;
+        --heading-color:#5d00e8;
+        --heading-background-color: #a60000;
     }
     .title h1, .dect {
         text-shadow: 0 0 190px var(--heading-color), 0 0 90px var(--heading-color), 0 0 70px var(--heading-color)!important;
@@ -44,7 +46,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    color: #630f0f;
+    color: var(--heading-background-color);
     z-index: -1;
     text-shadow: none
 }
@@ -65,7 +67,7 @@
     top: 0;
     left: 0;
     right: 0;
-    color: #630f0f;
+    color: var(--heading-background-color);
     z-index: -1;
     text-shadow: none
 }
