@@ -93,6 +93,9 @@ $(document).ready(event=>{
                     .display();
             }
         } else if (msg.type= "chat/message") {
+            if (!msg.text) {
+                return;
+            }
             console.log(msg);
             new ViewChatMessageBuilder()
                 .set_type(ViewChatMessage.Type.NOT_OWN)
