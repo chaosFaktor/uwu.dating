@@ -43,14 +43,13 @@ class LoginDoHandler(torndsession.sessionhandler.SessionBaseHandler):
             session_id = UserManager.register_new_user(User())
             self.session['id'] = session_id
         user = UserManager.get_user_by_session_id(session_id)
-        data = json.loads(self.request.body.decode('utf-8'))
         user.set_user_data(
-            gender=data.get("gender"),
-            earnestness=data.get("earnestness"),
-            cat_ears=data.get("cat_ears"),
-            cat_ear_color=data.get("color"),
-            dect=data.get("dect"),
-            distinguish=data.get("distinguish")
+            gender=self.get_argument("gender"),
+            earnestness=self.get_argument("earnestness"),
+            cat_ears=self.get_argument("cat_ears"),
+            cat_ear_color=self.get_argument("color"),
+            dect=self.get_argument("dect"),
+            distinguish=self.get_argument("distinguish")
         )
         user.set_logged_in(True)
         self.redirect("/app/waiting_room")

@@ -11,17 +11,30 @@ $("form").each(element=>{
     });
     
 });
-async function login(event) {
-    await fetch("/login_do", {
-      method: "POST",
-      headers: {'Content-Type': 'application/json'}, 
-      body: JSON.stringify(values)
-    });
+async function login(action = "/login_do", method = "post") {
+    
+    let form_obj = document.createElement("form");
+    $(form_obj).attr("method", method);
+    $(form_obj).attr("action", action);
+    
+    console.log(values);
+    console.log(Object.entries(values));
+    let input;
+    for (let [key, value] of Object.entries(values)) {
+        input = document.createElement("input");
+        $(input).attr("name", key);
+        $(input).val(value);
+        $(form_obj).append(input);
+
+    }
+    $("body").append(form_obj);
+    form_obj.submit();
+    return;
+
 }
 $("#submit-form").on("submit", event=>{
     login().then(event=>{
         setTimeout(event=>{
-            window.location.href = "/app/waiting_room";
         }, 1000);
     });
 })

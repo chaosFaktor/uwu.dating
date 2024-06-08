@@ -26,6 +26,7 @@
                     {"value": "yes", "html": "Yes"},
                     {"value": "no", "html": "No"},
                     {"value": "maybe", "html": "Maybe"},
+                    {"value": "yesnomaybe", "html": "Yes, No, Maybe"},
                     {"value": "diverse", "html": "Diverse"}
             ]
         },
